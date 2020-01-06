@@ -1,16 +1,27 @@
 import React from "react";
-import { View, ImageBackground, Text, StyleSheet } from "react-native";
+import {
+  View,
+  ImageBackground,
+  TouchableWithoutFeedback,
+  Text,
+  StyleSheet
+} from "react-native";
 
 const GalleryView = props => {
   const artwork = props.artwork;
+  const navigation = props.navigation;
   return (
     <View stye={styles.container}>
-      <ImageBackground source={{ uri: artwork.imageURL }} style={styles.card}>
-        <View style={styles.info}>
-          <Text style={styles.title}>{artwork.artist}</Text>
-          <Text style={styles.text}>Gallery {artwork.gallery}</Text>
-        </View>
-      </ImageBackground>
+      <TouchableWithoutFeedback
+        onPress={() => navigation.navigate("SingleView", { id: artwork.id })}
+      >
+        <ImageBackground source={{ uri: artwork.imageURL }} style={styles.card}>
+          <View style={styles.info}>
+            <Text style={styles.title}>{artwork.artist}</Text>
+            <Text style={styles.text}>Gallery {artwork.gallery}</Text>
+          </View>
+        </ImageBackground>
+      </TouchableWithoutFeedback>
     </View>
   );
 };

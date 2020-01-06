@@ -10,6 +10,7 @@ import Welcome from "../screens/Welcome";
 import Capture from "../screens/Capture";
 import Favorites from "../screens/Favorites";
 import Gallery from "../screens/Gallery";
+import SingleView from "../screens/ArtworkSingleView";
 
 const Tabs = createBottomTabNavigator(
   {
@@ -43,6 +44,7 @@ const Tabs = createBottomTabNavigator(
 const screens = createStackNavigator(
   {
     Welcome,
+    SingleView,
     TabsNav: {
       screen: Tabs,
       navigationOptions: ({ navigation }) => {
@@ -76,10 +78,11 @@ const screens = createStackNavigator(
       headerLeftContainerStyle: {
         marginLeft: 20
       },
-      headerBackImage: null,
+      headerBackImage: (
+        <Icon name="ios-arrow-round-back" color="#E59B77" size={30} />
+      ),
       headerBackTitle: null,
       headerRight: <Image source={require("../assets/title.png")} />,
-      headerLeft: null,
       headerRightContainerStyle: {
         alignItems: "center",
         paddingRight: 30

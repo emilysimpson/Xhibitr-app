@@ -1,26 +1,30 @@
 import React from "react";
+import * as tf from "@tensorflow/tfjs";
 import {
-  Text,
-  View,
-  Modal,
-  TouchableWithoutFeedback,
-  Button
-} from "react-native";
+  bundleResourceIO,
+  decodeJpeg,
+  fetch
+} from "@tensorflow/tfjs-react-native";
+import { Text, View } from "react-native";
 import { Camera } from "expo-camera";
-import Icon from "react-native-vector-icons/Ionicons";
+
+// const modelJson = require("../assets/model.json");
+// const modelWeights = require("../assets/weights.bin");
 
 class Capture extends React.Component {
-  camera = null;
-
   state = {
-    visibleModal: true,
-    hasPermission: null
+    hasPermission: null,
+    useModel: {}
   };
 
   async componentDidMount() {
     const camera = await Camera.requestPermissionsAsync();
     const hasPermission = camera.status === "granted";
-    this.setState({ hasPermission });
+    // const model = await tf.loadLayersModel(
+    //   bundleResourceIO(modelJson, modelWeights)
+    // );
+    // console.log("MODEL: ", model);
+    // this.setState({ hasPermission, useModel: model });
   }
 
   render() {
@@ -33,7 +37,7 @@ class Capture extends React.Component {
     return (
       <React.Fragment>
         <View style={{ flex: 1 }}>
-          <Camera style={{ flex: 1 }} ref={camera => (this.camera = camera)}>
+          <Camera style={{ flex: 1 }}>
             {/* <Modal animationType={"slide"} visible={this.state.visibleModal}> */}
             {/* <View style={{ top: 50 }}> */}
             {/* <Button

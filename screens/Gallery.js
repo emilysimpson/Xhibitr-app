@@ -2,7 +2,6 @@ import React from "react";
 import { Text, ScrollView, View, StyleSheet } from "react-native";
 import GalleryView from "../components/ArtworkGalleryView";
 
-import data from "../dummyData/data";
 import database from "../db";
 
 class Gallery extends React.Component {
@@ -28,6 +27,7 @@ class Gallery extends React.Component {
   }
 
   render() {
+    const { navigation } = this.props;
     return (
       <View style={{ flex: 1 }}>
         <ScrollView
@@ -35,7 +35,11 @@ class Gallery extends React.Component {
           contentContainerStyle={styles.container}
         >
           {this.state.artworks.map(artwork => (
-            <GalleryView key={artwork.title} artwork={artwork} />
+            <GalleryView
+              key={artwork.id}
+              navigation={navigation}
+              artwork={artwork}
+            />
           ))}
         </ScrollView>
       </View>

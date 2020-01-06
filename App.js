@@ -1,11 +1,35 @@
 import React from "react";
+import * as tf from "@tensorflow/tfjs";
+import {
+  bundleResourceIO,
+  decodeJpeg,
+  fetch
+} from "@tensorflow/tfjs-react-native";
 
 import Navigation from "./navigation";
 
-export default function App() {
-  return (
-    <React.Fragment>
-      <Navigation />
-    </React.Fragment>
-  );
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isTfReady: false
+    };
+  }
+
+  async componentDidMount() {
+    // Wait for tf to be ready.
+    await tf.ready();
+    // Signal to the app that tensorflow.js can now be used.
+    this.setState({
+      isTfReady: true
+    });
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        <Navigation />
+      </React.Fragment>
+    );
+  }
 }
