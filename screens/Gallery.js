@@ -11,9 +11,11 @@ class Gallery extends React.Component {
     this.state = {
       artworks: []
     };
+    this.addFavorite = this.addFavorite.bind(this);
+    this.removeFavorite = this.removeFavorite.bind(this);
   }
 
-  componentDidMount() {
+  getUpdate() {
     database
       .collection("artwork")
       .get()
@@ -24,6 +26,26 @@ class Gallery extends React.Component {
           artworks: initArtworks
         });
       });
+  }
+
+  componentDidMount() {
+    this.getUpdate();
+  }
+
+  addFavorite(id) {
+    database
+      .collection("artwork")
+      .doc(id)
+      .update({ isFavorite: true })
+      .then(this.getUpdate());
+  }
+
+  removeFavorite(id) {
+    database
+      .collection("artwork")
+      .doc(id)
+      .update({ isFavorite: false })
+      .then(this.getUpdate());
   }
 
   render() {
@@ -39,6 +61,8 @@ class Gallery extends React.Component {
               key={artwork.id}
               navigation={navigation}
               artwork={artwork}
+              addFavorite={this.addFavorite}
+              removeFavorite={this.removeFavorite}
             />
           ))}
         </ScrollView>
