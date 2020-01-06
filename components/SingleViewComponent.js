@@ -11,6 +11,8 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 const { width, height } = Dimensions.get("window");
 
+import FactView from "./FactView";
+
 const SingleViewComponent = props => {
   const artwork = props.artwork;
   const scrollX = new Animated.Value(0);
@@ -49,10 +51,26 @@ const SingleViewComponent = props => {
           scrollEventThrottle={16}
           snapToAlignment="center"
           data={artwork.facts}
-          keyExtractor={(item, index) => `${item}`}
-          renderItem={({ item }) => (
+          keyExtractor={(item, index) => `${index}`}
+          renderItem={({ item, index }) => (
             <View style={styles.factContainer}>
-              <Text>{item}</Text>
+              <FactView item={item} index={index} artwork={artwork} />
+              <View
+                style={{
+                  display: "flex",
+                  alignSelf: "flex-end"
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 10,
+                    textTransform: "uppercase",
+                    color: "#9A9A9A"
+                  }}
+                >
+                  {index + 1} / {artwork.facts.length}
+                </Text>
+              </View>
             </View>
           )}
           onScroll={Animated.event([
@@ -103,7 +121,7 @@ const styles = StyleSheet.create({
   },
   artist: {
     color: "#484B89",
-    fontSize: 15,
+    fontSize: 20,
     paddingBottom: 10
   },
   metaData: {
@@ -115,6 +133,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "flex-start",
     width: width - 40,
+    height: 230,
     overflow: "visible",
     margin: 20,
     padding: 20,

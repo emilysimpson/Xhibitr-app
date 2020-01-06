@@ -5,11 +5,20 @@ import {
   decodeJpeg,
   fetch
 } from "@tensorflow/tfjs-react-native";
-import { Text, View } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions
+} from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
 import { Camera } from "expo-camera";
 
 // const modelJson = require("../assets/model.json");
 // const modelWeights = require("../assets/weights.bin");
+
+const { width } = Dimensions.get("window");
 
 class Capture extends React.Component {
   state = {
@@ -24,7 +33,8 @@ class Capture extends React.Component {
     //   bundleResourceIO(modelJson, modelWeights)
     // );
     // console.log("MODEL: ", model);
-    // this.setState({ hasPermission, useModel: model });
+    this.setState({ hasPermission });
+    // set state with : { useModel: model }
   }
 
   render() {
@@ -35,34 +45,27 @@ class Capture extends React.Component {
     }
 
     return (
-      <React.Fragment>
-        <View style={{ flex: 1 }}>
-          <Camera style={{ flex: 1 }}>
-            {/* <Modal animationType={"slide"} visible={this.state.visibleModal}> */}
-            {/* <View style={{ top: 50 }}> */}
-            {/* <Button
-              title="Close"
-              onPress={() => this.setState({ visibleModal: false })}
-            /> */}
-            {/* </View> */}
-            {/* </Modal> */}
-          </Camera>
-        </View>
-        {/* <View style={{ top: 200 }}>
-          <TouchableWithoutFeedback
-            onPress={() => this.setState({ visibleModal: true })}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center"
-            }}
-          >
-            <Icon name="md-camera" style={{ color: "red" }} size={80} />
-          </TouchableWithoutFeedback>
-        </View> */}
-      </React.Fragment>
+      <View style={{ flex: 1 }}>
+        <Camera style={{ flex: 1, position: "relative" }}>
+          <View style={styles.cameraBtnContainer}>
+            <TouchableOpacity onPress={() => {}}>
+              <Icon name="ios-radio-button-on" color="#484B89" size={80} />
+            </TouchableOpacity>
+          </View>
+        </Camera>
+      </View>
     );
   }
 }
 
+const styles = StyleSheet.create({
+  cameraBtnContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    position: "absolute",
+    bottom: 35,
+    left: width / 2 - 30
+  }
+});
 export default Capture;
