@@ -6,16 +6,20 @@ import {
   Image,
   FlatList,
   Animated,
-  Dimensions
+  Dimensions,
+  TouchableOpacity
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-const { width, height } = Dimensions.get("window");
+import openMap from "react-native-open-maps";
 
 import FactView from "./FactView";
+
+const { width, height } = Dimensions.get("window");
 
 const SingleViewComponent = props => {
   const artwork = props.artwork;
   const scrollX = new Animated.Value(0);
+
   return (
     <React.Fragment>
       <View style={styles.favoriteContainer}>
@@ -40,6 +44,14 @@ const SingleViewComponent = props => {
         <Text style={styles.metaData}>
           {artwork.medium} | {artwork.date}
         </Text>
+
+        <TouchableOpacity
+          onPress={() => openMap(artwork.galleryCoords)}
+          style={styles.galleryNumContainer}
+        >
+          <Text style={styles.gallery}>Gallery {artwork.gallery}</Text>
+          <Icon name="md-open" color="#404040" size={15} />
+        </TouchableOpacity>
       </View>
 
       <View>
@@ -111,7 +123,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#9A9A9A",
     borderBottomWidth: StyleSheet.hairlineWidth,
     justifyContent: "center",
-    paddingBottom: 20,
+    paddingBottom: 15,
     marginHorizontal: 20
   },
   title: {
@@ -127,7 +139,17 @@ const styles = StyleSheet.create({
   metaData: {
     textTransform: "uppercase",
     fontSize: 12,
-    color: "#9A9A9A"
+    color: "#9A9A9A",
+    paddingBottom: 5
+  },
+  galleryNumContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  gallery: {
+    color: "#404040",
+    paddingRight: 5
   },
   factContainer: {
     display: "flex",

@@ -5,7 +5,8 @@ const FactView = props => {
   const { item, index } = props;
   return (
     <React.Fragment>
-      <Text style={styles.title}>{item.title}</Text>
+      {item.title ? <Text style={styles.title}>{item.title}</Text> : null}
+
       <View style={styles.subContainer}>
         {item.imageURL ? (
           <Image
@@ -13,7 +14,9 @@ const FactView = props => {
             source={{ uri: item.imageURL }}
           />
         ) : null}
-        <Text style={index === 0 ? styles.content : null}>{item.content}</Text>
+        <Text style={index === 0 ? styles.contentArtist : styles.content}>
+          {item.content}
+        </Text>
       </View>
     </React.Fragment>
   );
@@ -23,16 +26,22 @@ const styles = StyleSheet.create({
   title: {
     color: "#484B89",
     fontSize: 15,
-    paddingBottom: 10,
-    textTransform: "uppercase"
+    paddingBottom: 15,
+    textTransform: "uppercase",
+    alignSelf: "center"
   },
   subContainer: {
     display: "flex",
     flexDirection: "row"
   },
+  contentArtist: {
+    paddingLeft: 10,
+    paddingRight: 20,
+    width: "70%",
+    fontSize: 15
+  },
   content: {
-    marginHorizontal: 10,
-    width: "70%"
+    fontSize: 15
   }
 });
 

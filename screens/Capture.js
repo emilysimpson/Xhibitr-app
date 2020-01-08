@@ -1,10 +1,4 @@
 import React from "react";
-import * as tf from "@tensorflow/tfjs";
-import {
-  bundleResourceIO,
-  decodeJpeg,
-  fetch
-} from "@tensorflow/tfjs-react-native";
 import {
   Text,
   View,
@@ -15,27 +9,39 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import { Camera } from "expo-camera";
 
-// const modelJson = require("../assets/model.json");
-// const modelWeights = require("../assets/weights.bin");
+import "@tensorflow/tfjs-react-native";
+import * as model from "../model-analysis/ArtDetectionModel";
 
 const { width } = Dimensions.get("window");
 
 class Capture extends React.Component {
+  camera = null;
   state = {
     hasPermission: null,
-    useModel: {}
+    photoData: null,
+    predictions: null
   };
 
   async componentDidMount() {
     const camera = await Camera.requestPermissionsAsync();
     const hasPermission = camera.status === "granted";
-    // const model = await tf.loadLayersModel(
-    //   bundleResourceIO(modelJson, modelWeights)
-    // );
-    // console.log("MODEL: ", model);
     this.setState({ hasPermission });
-    // set state with : { useModel: model }
   }
+
+  takePicture = async () => {
+    if (this.camera) {
+      const photoData = await this.camera.takePictureAsync({ base64: true });
+      this.setState({ ...this.state, photoData });
+
+      await this.analyze();
+    }
+  };
+
+  analyze = async () => {
+    const image = this.state.photoData;
+    const predictions = await model.analyze(image);
+    this.setState({ ...this.state, predictions });
+  };
 
   render() {
     if (this.state.hasPermission === null) {
@@ -46,9 +52,18 @@ class Capture extends React.Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <Camera style={{ flex: 1, position: "relative" }}>
+        <Camera
+          ref={ref => {
+            this.camera = ref;
+          }}
+          style={{ flex: 1, position: "relative" }}
+        >
           <View style={styles.cameraBtnContainer}>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity
+              onPress={() => {
+                this.takePicture();
+              }}
+            >
               <Icon name="ios-radio-button-on" color="#484B89" size={80} />
             </TouchableOpacity>
           </View>
