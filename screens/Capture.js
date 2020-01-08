@@ -34,7 +34,7 @@ class Capture extends React.Component {
     if (this.camera) {
       this.setState({ ...this.state, isLoading: true });
       const photoData = await this.camera.takePictureAsync({
-        quality: 0.1,
+        quality: 1,
         base64: true
       });
       this.setState({ ...this.state, photoData });
@@ -47,6 +47,7 @@ class Capture extends React.Component {
     const image = this.state.photoData;
     const predictions = await model.analyze(image);
     this.setState({ ...this.state, predictions, isLoading: false });
+    console.log(predictions);
   };
 
   render() {

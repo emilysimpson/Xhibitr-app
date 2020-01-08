@@ -15,7 +15,13 @@ const GalleryView = props => {
   return (
     <View stye={styles.container}>
       <TouchableWithoutFeedback
-        onPress={() => navigation.navigate("SingleView", { id: artwork.id })}
+        onPress={() =>
+          navigation.navigate("SingleView", {
+            id: artwork.id,
+            addFavorite: props.addFavorite,
+            removeFavorite: props.removeFavorite
+          })
+        }
       >
         <ImageBackground source={{ uri: artwork.imageURL }} style={styles.card}>
           <View style={styles.favoriteContainer}>

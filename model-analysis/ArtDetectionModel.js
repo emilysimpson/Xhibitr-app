@@ -1,5 +1,5 @@
 import * as tf from "@tensorflow/tfjs";
-import { fetch, decodeJpeg } from "@tensorflow/tfjs-react-native";
+import { fetch } from "@tensorflow/tfjs-react-native";
 import jpeg from "jpeg-js";
 import { base64DecToArr } from "../utils/Base64";
 import { resizeImage } from "../utils/ImageResize";
@@ -27,6 +27,7 @@ export const loadModel = async () => {
 };
 
 const imageToTensor = rawImageData => {
+  // ____________ VERSION 1 _______________
   const TO_UINT8ARRAY = true;
   const { width, height, data } = jpeg.decode(rawImageData, TO_UINT8ARRAY);
   // Drop the alpha channel info for mobilenet
@@ -44,7 +45,11 @@ const imageToTensor = rawImageData => {
   // adding .expandDims(1) gives an error 'expected input_1
   // to have shape [null,224,224,3] but got array with shape
   // [2376,1,3898,3].'
-  return tf.tensor3d(buffer, [height, width, 3]);
+  return tf
+    .tensor3d(buffer, [height, width, 3])
+    .resizeNearestNeighbor([224, 224])
+    .toFloat()
+    .expandDims();
 };
 
 export const analyze = async image => {
@@ -58,9 +63,11 @@ export const analyze = async image => {
     //prev decodeJpeg used here, but error decodeJpeg not a function?
     const imageTensor = imageToTensor(rawImageData);
 
+    // const resized = tf.reshape(imageTensor, [1, 224, 224, 3], "resize");
+
     const prediction = await model.predict(imageTensor);
 
-    return prediction;
+    return prediction.data();
 
     // let rawImageData = base64DecToArr(imageBase64);
 

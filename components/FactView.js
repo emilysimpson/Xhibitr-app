@@ -1,5 +1,6 @@
 import React from "react";
-import { Text, View, Image, StyleSheet } from "react-native";
+import { Text, View, Image, StyleSheet, Linking } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const FactView = props => {
   const { item, index } = props;
@@ -17,6 +18,31 @@ const FactView = props => {
         <Text style={index === 0 ? styles.contentArtist : styles.content}>
           {item.content}
         </Text>
+        {item.link ? (
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              height: 180
+            }}
+          >
+            <Icon
+              style={{ paddingTop: 5 }}
+              name={item.iconName}
+              size={30}
+              color="#484B89"
+            />
+            <Text
+              style={styles.link}
+              onPress={() => Linking.openURL(item.link)}
+            >
+              {" "}
+              {item.text}
+            </Text>
+          </View>
+        ) : null}
       </View>
     </React.Fragment>
   );
@@ -37,11 +63,16 @@ const styles = StyleSheet.create({
   contentArtist: {
     paddingLeft: 10,
     paddingRight: 20,
-    width: "70%",
+    width: "75%",
     fontSize: 15
   },
   content: {
     fontSize: 15
+  },
+  link: {
+    display: "flex",
+    fontSize: 20,
+    color: "#484B89"
   }
 });
 

@@ -33,7 +33,11 @@ class SingleView extends React.Component {
           showsVerticalScrollIndicator={false}
           style={styles.container}
         >
-          <SingleViewComponent artwork={this.state.artwork} />
+          <SingleViewComponent
+            artwork={this.state.artwork}
+            addFavorite={this.props.navigation.state.params.addFavorite}
+            removeFavorite={this.props.navigation.state.params.removeFavorite}
+          />
         </ScrollView>
       </View>
     );

@@ -7,7 +7,8 @@ import {
   FlatList,
   Animated,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  TouchableWithoutFeedback
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import openMap from "react-native-open-maps";
@@ -25,9 +26,17 @@ const SingleViewComponent = props => {
       <View style={styles.favoriteContainer}>
         <Text style={styles.title}>{artwork.title}</Text>
         {artwork.isFavorite ? (
-          <Icon name="md-heart" color="#484B89" size={25} />
+          <TouchableWithoutFeedback
+            onPress={() => props.removeFavorite(`${artwork.id}`)}
+          >
+            <Icon name="md-heart" color="#484B89" size={25} />
+          </TouchableWithoutFeedback>
         ) : (
-          <Icon name="md-heart-empty" color="#484B89" size={25} />
+          <TouchableWithoutFeedback
+            onPress={() => props.addFavorite(`${artwork.id}`)}
+          >
+            <Icon name="md-heart-empty" color="#484B89" size={25} />
+          </TouchableWithoutFeedback>
         )}
       </View>
 
