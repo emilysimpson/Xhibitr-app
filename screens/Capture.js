@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Camera } from "expo-camera";
+import Loading from "../components/Loading";
 
 import "@tensorflow/tfjs-react-native";
 import * as model from "../model-analysis/ArtDetectionModel";
@@ -18,6 +19,7 @@ class Capture extends React.Component {
   camera = null;
   state = {
     hasPermission: null,
+    isLoading: null,
     photoData: null,
     predictions: null
   };
@@ -30,7 +32,11 @@ class Capture extends React.Component {
 
   takePicture = async () => {
     if (this.camera) {
-      const photoData = await this.camera.takePictureAsync({ base64: true });
+      this.setState({ ...this.state, isLoading: true });
+      const photoData = await this.camera.takePictureAsync({
+        quality: 0.1,
+        base64: true
+      });
       this.setState({ ...this.state, photoData });
 
       await this.analyze();
@@ -40,7 +46,7 @@ class Capture extends React.Component {
   analyze = async () => {
     const image = this.state.photoData;
     const predictions = await model.analyze(image);
-    this.setState({ ...this.state, predictions });
+    this.setState({ ...this.state, predictions, isLoading: false });
   };
 
   render() {
@@ -58,15 +64,19 @@ class Capture extends React.Component {
           }}
           style={{ flex: 1, position: "relative" }}
         >
-          <View style={styles.cameraBtnContainer}>
-            <TouchableOpacity
-              onPress={() => {
-                this.takePicture();
-              }}
-            >
-              <Icon name="ios-radio-button-on" color="#484B89" size={80} />
-            </TouchableOpacity>
-          </View>
+          {this.state.isLoading ? (
+            <Loading />
+          ) : (
+            <View style={styles.cameraBtnContainer}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.takePicture();
+                }}
+              >
+                <Icon name="ios-radio-button-on" color="#484B89" size={80} />
+              </TouchableOpacity>
+            </View>
+          )}
         </Camera>
       </View>
     );

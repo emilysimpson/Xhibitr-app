@@ -12,7 +12,7 @@ class Welcome extends React.Component {
     return (
       <View style={styles.container}>
         <ImageBackground
-          source={require("../assets/Xhibtr.png")}
+          source={require("../assets/Xhibitr.png")}
           style={{ width: "100%", height: "100%" }}
         >
           <View style={styles.button}>

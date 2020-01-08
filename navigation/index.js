@@ -82,7 +82,12 @@ const screens = createStackNavigator(
         <Icon name="ios-arrow-round-back" color="#E59B77" size={30} />
       ),
       headerBackTitle: null,
-      headerRight: <Image source={require("../assets/title.png")} />,
+      headerRight: (
+        <Image
+          style={{ width: 83, height: 32 }}
+          source={require("../assets/title2.png")}
+        />
+      ),
       headerRightContainerStyle: {
         alignItems: "center",
         paddingRight: 30
