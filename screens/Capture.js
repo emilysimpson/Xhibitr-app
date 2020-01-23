@@ -9,11 +9,11 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import { Camera } from "expo-camera";
 import Loading from "../components/Loading";
-
-import "@tensorflow/tfjs-react-native";
-import * as model from "../model-analysis/ArtDetectionModel";
+import identify from "../model-analysis/ArtDetectionModel";
+import Clarifai from "clarifai";
 
 const { width } = Dimensions.get("window");
+const app = new Clarifai.App({ apiKey: "fa2bc57db65841e28823ea1965a56af7" });
 
 class Capture extends React.Component {
   camera = null;
@@ -34,20 +34,27 @@ class Capture extends React.Component {
     if (this.camera) {
       this.setState({ ...this.state, isLoading: true });
       const photoData = await this.camera.takePictureAsync({
-        quality: 1,
+        quality: 0.5,
         base64: true
       });
       this.setState({ ...this.state, photoData });
-
       await this.analyze();
     }
   };
 
   analyze = async () => {
     const image = this.state.photoData;
-    const predictions = await model.analyze(image);
-    this.setState({ ...this.state, predictions, isLoading: false });
-    console.log(predictions);
+    const model = await app.models.initModel({
+      id: "AIC Artwork Recognizer"
+    });
+    const res = await model.predict({ base64: image.base64 });
+
+    this.setState({
+      ...this.state,
+      prediction: res.outputs[0].data.concepts[0].name,
+      isLoading: false
+    });
+    console.log("PREDICTION", res.outputs[0].data.concepts[0].name);
   };
 
   render() {
