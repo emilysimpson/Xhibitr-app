@@ -9,7 +9,6 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import { Camera } from "expo-camera";
 import Loading from "../components/Loading";
-import identify from "../model-analysis/ArtDetectionModel";
 import Clarifai from "clarifai";
 
 const { width } = Dimensions.get("window");
