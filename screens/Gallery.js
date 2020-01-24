@@ -15,21 +15,38 @@ class Gallery extends React.Component {
     this.removeFavorite = this.removeFavorite.bind(this);
   }
 
-  getUpdate() {
+  // getUpdate() {
+  //   database
+  //     .collection("artwork")
+  //     .get()
+  //     .then(snapshot => {
+  //       const initArtworks = [];
+  //       snapshot.forEach(artwork => initArtworks.push(artwork.data()));
+  //       this.setState({
+  //         artworks: initArtworks
+  //       });
+  //     });
+  // }
+
+  getArt = () => {
     database
       .collection("artwork")
+      .doc("fromAPI")
       .get()
       .then(snapshot => {
+        const dataObj = snapshot.data();
         const initArtworks = [];
-        snapshot.forEach(artwork => initArtworks.push(artwork.data()));
+        dataObj.data.forEach(artwork => initArtworks.push(artwork));
         this.setState({
           artworks: initArtworks
         });
-      });
-  }
+      })
+      .then(() => console.log(this.state.artworks[0]));
+  };
 
   componentDidMount() {
-    this.getUpdate();
+    // this.getUpdate();
+    this.getArt();
   }
 
   addFavorite(id) {

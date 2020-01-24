@@ -1,5 +1,4 @@
 const firebase = require("firebase");
-// Required for side-effects
 require("firebase/firestore");
 
 const firebaseConfig = {
@@ -8,7 +7,7 @@ const firebaseConfig = {
   projectId: "xhibitr-app"
 };
 
-firebase.initializeApp(firebaseConfig);
+export const fb = firebase.initializeApp(firebaseConfig);
 
 const database = firebase.firestore();
 

@@ -1,26 +1,21 @@
 import React from "react";
-import { StyleSheet, Button, View, ImageBackground } from "react-native";
-import Login from "../components/Login";
+import { Button, View, StyleSheet } from "react-native";
+import { TextInput } from "react-native-gesture-handler";
 
-class Welcome extends React.Component {
-  constructor() {
-    super();
-  }
-  static navigationOptions = {
-    header: null
-  };
-
+class Signup extends React.Component {
   render() {
-    const { navigation } = this.props;
-
+    const navigation = this.props.navigation;
     return (
       <View style={styles.container}>
-        <ImageBackground
-          source={require("../assets/Xhibitr.png")}
-          style={{ width: "100%", height: "100%" }}
-        >
-          <Login navigation={navigation} styles={styles} />
-        </ImageBackground>
+        <TextInput style={styles.inputEmail} placeholder="Email" />
+        <TextInput style={styles.inputPassword} placeholder="Password" />
+        <View style={styles.button}>
+          <Button
+            color="#484B89"
+            title="SIGN UP"
+            onPress={() => navigation.navigate("Gallery")}
+          />
+        </View>
       </View>
     );
   }
@@ -39,14 +34,14 @@ const styles = StyleSheet.create({
     position: "absolute",
     justifyContent: "center",
     alignSelf: "center",
-    bottom: 290,
+    bottom: 190,
     height: 40,
     width: 150,
     borderRadius: 20
   },
   inputEmail: {
     position: "absolute",
-    top: 400,
+    top: 500,
     backgroundColor: "#fff",
     width: 250,
     height: 30,
@@ -56,7 +51,7 @@ const styles = StyleSheet.create({
   },
   inputPassword: {
     position: "absolute",
-    top: 440,
+    top: 540,
     backgroundColor: "#fff",
     width: 250,
     height: 30,
@@ -66,8 +61,8 @@ const styles = StyleSheet.create({
   },
   signUp: {
     position: "absolute",
-    bottom: 230
+    bottom: 130
   }
 });
 
-export default Welcome;
+export default Signup;

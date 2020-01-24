@@ -53,7 +53,9 @@ class Capture extends React.Component {
       prediction: res.outputs[0].data.concepts[0].name,
       isLoading: false
     });
-    console.log("PREDICTION", res.outputs[0].data.concepts[0].name);
+
+    const prediction = res.outputs[0].data.concepts[0].name;
+    console.log("PREDICTION", prediction);
   };
 
   render() {

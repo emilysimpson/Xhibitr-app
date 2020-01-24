@@ -11,6 +11,7 @@ import Capture from "../screens/Capture";
 import Favorites from "../screens/Favorites";
 import Gallery from "../screens/Gallery";
 import SingleView from "../screens/ArtworkSingleView";
+import Login from "../components/Login";
 
 const Tabs = createBottomTabNavigator(
   {
@@ -44,6 +45,7 @@ const Tabs = createBottomTabNavigator(
 const screens = createStackNavigator(
   {
     Welcome,
+    Login,
     SingleView,
     TabsNav: {
       screen: Tabs,
