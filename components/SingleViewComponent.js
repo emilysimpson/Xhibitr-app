@@ -19,13 +19,14 @@ const { width, height } = Dimensions.get("window");
 
 const SingleViewComponent = props => {
   const artwork = props.artwork;
+  const favorites = props.favorites;
   const scrollX = new Animated.Value(0);
 
   return (
     <React.Fragment>
       <View style={styles.favoriteContainer}>
         <Text style={styles.title}>{artwork.title}</Text>
-        {/* {favorites[artwork.id] ? (
+        {favorites[artwork.id] ? (
           <TouchableWithoutFeedback
             onPress={() => props.removeFavorite(`${artwork.id}`)}
           >
@@ -37,7 +38,7 @@ const SingleViewComponent = props => {
           >
             <Icon name="md-heart-empty" color="#484B89" size={25} />
           </TouchableWithoutFeedback>
-        )} */}
+        )}
       </View>
 
       <View style={styles.imageContainer}>
@@ -82,42 +83,6 @@ const SingleViewComponent = props => {
         <Text style={styles.infoText}>
           {artwork.description.replace(/(<([^>]+)>)/gi, "")}
         </Text>
-        {/* <FlatList
-          horizontal
-          pagingEnabled
-          scrollEnabled
-          showsHorizontalScrollIndicator={false}
-          scrollEventThrottle={16}
-          snapToAlignment="center"
-          data={artwork.facts}
-          keyExtractor={(item, index) => `${index}`}
-          renderItem={({ item, index }) => (
-            <View style={styles.factContainer}>
-              <FactView item={item} index={index} artwork={artwork} />
-              <View
-                style={{
-                  display: "flex",
-                  alignSelf: "flex-end"
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 10,
-                    textTransform: "uppercase",
-                    color: "#9A9A9A"
-                  }}
-                >
-                  {index + 1} / {artwork.facts.length}
-                </Text>
-              </View>
-            </View>
-          )}
-          onScroll={Animated.event([
-            {
-              nativeEvent: { contentOffset: { x: scrollX } }
-            }
-          ])}
-        /> */}
       </View>
 
       {Array.isArray(props.similarWorks) ? (
