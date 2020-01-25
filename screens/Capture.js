@@ -4,12 +4,14 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  Vibration
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Camera } from "expo-camera";
 import Loading from "../components/Loading";
 import Clarifai from "clarifai";
+import database from "../db";
 
 const { width } = Dimensions.get("window");
 const app = new Clarifai.App({ apiKey: "fa2bc57db65841e28823ea1965a56af7" });
@@ -20,14 +22,31 @@ class Capture extends React.Component {
     hasPermission: null,
     isLoading: null,
     photoData: null,
-    predictions: null
+    predictions: null,
+    artworks: []
   };
 
   async componentDidMount() {
     const camera = await Camera.requestPermissionsAsync();
     const hasPermission = camera.status === "granted";
     this.setState({ hasPermission });
+    this.getArt();
   }
+
+  getArt = () => {
+    database
+      .collection("artwork")
+      .doc("fromAPI")
+      .get()
+      .then(snapshot => {
+        const dataObj = snapshot.data();
+        const initArtworks = [];
+        dataObj.data.forEach(artwork => initArtworks.push(artwork));
+        this.setState({
+          artworks: initArtworks
+        });
+      });
+  };
 
   takePicture = async () => {
     if (this.camera) {
@@ -54,8 +73,29 @@ class Capture extends React.Component {
       isLoading: false
     });
 
-    const prediction = res.outputs[0].data.concepts[0].name;
-    console.log("PREDICTION", prediction);
+    // the array of all predictions
+    const prediction = res.outputs[0].data.concepts;
+    // grab the top prediction
+    const recognizedArt = this.state.artworks.filter(
+      artwork => artwork.id == prediction[0].name
+    );
+    // get an array of the lower-ranked predictions titles
+    const titles = [];
+    prediction.forEach(item => titles.push(item.name));
+    // set the similar art objects in an array
+    let similarWorks = [];
+    for (let i = 1; i < titles.length; i++) {
+      let artMatch = this.state.artworks.filter(item => item.id == titles[i]);
+      if (artMatch[0]) similarWorks.push(artMatch[0]);
+    }
+
+    Vibration.vibrate(200);
+
+    this.props.navigation.navigate("SingleView", {
+      artwork: recognizedArt[0],
+      prediction: prediction,
+      similarWorks: similarWorks
+    });
   };
 
   render() {

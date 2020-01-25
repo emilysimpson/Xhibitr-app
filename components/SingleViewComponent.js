@@ -19,14 +19,13 @@ const { width, height } = Dimensions.get("window");
 
 const SingleViewComponent = props => {
   const artwork = props.artwork;
-  const favorites = props.favorites;
   const scrollX = new Animated.Value(0);
 
   return (
     <React.Fragment>
       <View style={styles.favoriteContainer}>
         <Text style={styles.title}>{artwork.title}</Text>
-        {favorites[artwork.id] ? (
+        {/* {favorites[artwork.id] ? (
           <TouchableWithoutFeedback
             onPress={() => props.removeFavorite(`${artwork.id}`)}
           >
@@ -38,7 +37,7 @@ const SingleViewComponent = props => {
           >
             <Icon name="md-heart-empty" color="#484B89" size={25} />
           </TouchableWithoutFeedback>
-        )}
+        )} */}
       </View>
 
       <View style={styles.imageContainer}>
@@ -120,6 +119,50 @@ const SingleViewComponent = props => {
           ])}
         /> */}
       </View>
+
+      {Array.isArray(props.similarWorks) ? (
+        <>
+          <Text style={styles.moreArtTitle}>More art like this</Text>
+          <FlatList
+            horizontal
+            pagingEnabled
+            scrollEnabled
+            showsHorizontalScrollIndicator={false}
+            scrollEventThrottle={16}
+            snapToAlignment="center"
+            data={props.similarWorks}
+            keyExtractor={(item, index) => `${index}`}
+            renderItem={({ item, index }) => (
+              <View style={styles.factContainer}>
+                <TouchableOpacity
+                  onPress={() =>
+                    props.navigation.navigate("SingleView", {
+                      artwork: item,
+                      similarWorks: "NO-PREDICTIONS"
+                    })
+                  }
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={{
+                      uri:
+                        "https://www.artic.edu/iiif/2/" +
+                        item.image_id +
+                        "/full/400,/0/default.png"
+                    }}
+                    style={styles.image}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
+            onScroll={Animated.event([
+              {
+                nativeEvent: { contentOffset: { x: scrollX } }
+              }
+            ])}
+          />
+        </>
+      ) : null}
     </React.Fragment>
   );
 };
@@ -183,24 +226,27 @@ const styles = StyleSheet.create({
     width: width - 50,
     display: "flex",
     marginLeft: 25,
-    marginTop: 25
+    marginTop: 25,
+    borderBottomColor: "#9A9A9A",
+    borderBottomWidth: StyleSheet.hairlineWidth
   },
   infoText: {
     lineHeight: 25
+  },
+  moreArtTitle: {
+    color: "#484B89",
+    fontSize: 15,
+    textTransform: "uppercase",
+    alignSelf: "center"
   },
   factContainer: {
     display: "flex",
     alignItems: "flex-start",
     width: width - 40,
-    height: 230,
+    height: 300,
     overflow: "visible",
     margin: 20,
     padding: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    borderRadius: 15,
     backgroundColor: "#fff",
     fontFamily: "Gill Sans"
   }

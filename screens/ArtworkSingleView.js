@@ -16,6 +16,8 @@ class SingleView extends React.Component {
   render() {
     const navigation = this.props.navigation;
     const artwork = navigation.getParam("artwork", "NO-ARTWORK");
+    const prediction = navigation.getParam("prediction", "NO-PREDICTIONS");
+    const similarWorks = navigation.getParam("similarWorks", "NO-SIMILAR");
     const favorites = navigation.getParam("favorites", "NO-FAVORITES");
     return (
       <View style={{ flex: 1 }}>
@@ -26,8 +28,9 @@ class SingleView extends React.Component {
           <SingleViewComponent
             artwork={artwork}
             favorites={favorites}
-            addFavorite={this.props.navigation.state.params.addFavorite}
-            removeFavorite={this.props.navigation.state.params.removeFavorite}
+            prediction={prediction}
+            similarWorks={similarWorks}
+            navigation={navigation}
           />
         </ScrollView>
       </View>
