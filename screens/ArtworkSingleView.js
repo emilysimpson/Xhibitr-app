@@ -13,20 +13,12 @@ class SingleView extends React.Component {
     };
   }
 
-  componentDidMount() {
-    const navigation = this.props.navigation;
-    const id = JSON.stringify(navigation.getParam("id", "NO-ID"));
-
-    database
-      .collection("artwork")
-      .doc(id)
-      .get()
-      .then(doc => {
-        this.setState({ artwork: doc.data() });
-      });
-  }
+  componentDidMount() {}
 
   render() {
+    const navigation = this.props.navigation;
+    const artwork = navigation.getParam("artwork", "NO-ARTWORK");
+    const favorites = navigation.getParam("favorites", "NO-FAVORITES");
     return (
       <View style={{ flex: 1 }}>
         <ScrollView
@@ -34,7 +26,8 @@ class SingleView extends React.Component {
           style={styles.container}
         >
           <SingleViewComponent
-            artwork={this.state.artwork}
+            artwork={artwork}
+            favorites={favorites}
             addFavorite={this.props.navigation.state.params.addFavorite}
             removeFavorite={this.props.navigation.state.params.removeFavorite}
           />

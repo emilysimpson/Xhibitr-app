@@ -11,21 +11,31 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 
 const GalleryView = props => {
   const artwork = props.artwork;
+  const favorites = props.favorites;
   const navigation = props.navigation;
   return (
     <View stye={styles.container}>
       <TouchableWithoutFeedback
         onPress={() =>
           navigation.navigate("SingleView", {
-            id: artwork.id,
+            artwork: artwork,
+            favorites: favorites,
             addFavorite: props.addFavorite,
             removeFavorite: props.removeFavorite
           })
         }
       >
-        <ImageBackground source={{ uri: artwork.imageURL }} style={styles.card}>
+        <ImageBackground
+          source={{
+            uri:
+              "https://www.artic.edu/iiif/2/" +
+              artwork.image_id +
+              "/full/400,/0/default.png"
+          }}
+          style={styles.card}
+        >
           <View style={styles.favoriteContainer}>
-            {artwork.isFavorite ? (
+            {favorites[artwork.id] ? (
               <TouchableWithoutFeedback
                 onPress={() => props.removeFavorite(`${artwork.id}`)}
               >
@@ -40,8 +50,8 @@ const GalleryView = props => {
             )}
           </View>
           <View style={styles.info}>
-            <Text style={styles.title}>{artwork.artist}</Text>
-            <Text style={styles.text}>Gallery {artwork.gallery}</Text>
+            <Text style={styles.title}>{artwork.artist_title}</Text>
+            <Text style={styles.text}>{artwork.gallery_title}</Text>
           </View>
         </ImageBackground>
       </TouchableWithoutFeedback>

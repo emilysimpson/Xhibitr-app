@@ -6,7 +6,7 @@ const query = {
   fields: [
     "id",
     "title",
-    "artist_display",
+    "artist_title",
     "date_display",
     "image_id",
     "description",

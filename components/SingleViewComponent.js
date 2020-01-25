@@ -19,13 +19,14 @@ const { width, height } = Dimensions.get("window");
 
 const SingleViewComponent = props => {
   const artwork = props.artwork;
+  const favorites = props.favorites;
   const scrollX = new Animated.Value(0);
 
   return (
     <React.Fragment>
       <View style={styles.favoriteContainer}>
         <Text style={styles.title}>{artwork.title}</Text>
-        {artwork.isFavorite ? (
+        {favorites[artwork.id] ? (
           <TouchableWithoutFeedback
             onPress={() => props.removeFavorite(`${artwork.id}`)}
           >
@@ -43,28 +44,46 @@ const SingleViewComponent = props => {
       <View style={styles.imageContainer}>
         <Image
           resizeMode="contain"
-          source={{ uri: artwork.imageURL }}
+          source={{
+            uri:
+              "https://www.artic.edu/iiif/2/" +
+              artwork.image_id +
+              "/full/400,/0/default.png"
+          }}
           style={styles.image}
         />
       </View>
 
       <View style={styles.titleContainer}>
-        <Text style={styles.artist}>{artwork.artist}</Text>
+        <Text style={styles.artist}>{artwork.artist_title}</Text>
         <Text style={styles.metaData}>
           {artwork.medium} | {artwork.date}
         </Text>
 
-        <TouchableOpacity
-          onPress={() => openMap(artwork.galleryCoords)}
-          style={styles.galleryNumContainer}
-        >
-          <Text style={styles.gallery}>Gallery {artwork.gallery}</Text>
-          <Icon name="md-open" color="#404040" size={15} />
-        </TouchableOpacity>
+        {artwork.latitude ? (
+          <TouchableOpacity
+            onPress={() =>
+              openMap({
+                provider: "google",
+                query: artwork.latitude + "," + artwork.longitude,
+                zoom: 30
+              })
+            }
+            style={styles.galleryNumContainer}
+          >
+            <Text style={styles.gallery}>{artwork.gallery_title}</Text>
+            <Icon name="md-open" color="#404040" size={15} />
+          </TouchableOpacity>
+        ) : (
+          <Text style={styles.gallery}>{artwork.gallery_title}</Text>
+        )}
       </View>
 
-      <View>
-        <FlatList
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoText}>
+          {artwork.description.replace(/(<([^>]+)>)/gi, "")}
+        </Text>
+        {/* <FlatList
           horizontal
           pagingEnabled
           scrollEnabled
@@ -99,7 +118,7 @@ const SingleViewComponent = props => {
               nativeEvent: { contentOffset: { x: scrollX } }
             }
           ])}
-        />
+        /> */}
       </View>
     </React.Fragment>
   );
@@ -159,6 +178,15 @@ const styles = StyleSheet.create({
   gallery: {
     color: "#404040",
     paddingRight: 5
+  },
+  infoContainer: {
+    width: width - 50,
+    display: "flex",
+    marginLeft: 25,
+    marginTop: 25
+  },
+  infoText: {
+    lineHeight: 25
   },
   factContainer: {
     display: "flex",
