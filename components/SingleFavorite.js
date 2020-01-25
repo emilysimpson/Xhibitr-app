@@ -11,7 +11,7 @@ const SingleFavorite = props => {
     <View>
       <TouchableWithoutFeedback
         onPress={() =>
-          props.navigation.navigate("SingleView", { id: props.artwork.id })
+          props.navigation.navigate("SingleView", { artwork: props.artwork })
         }
       >
         <Image

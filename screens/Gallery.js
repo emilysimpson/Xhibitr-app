@@ -50,8 +50,7 @@ class Gallery extends React.Component {
     database
       .collection("favorites")
       .doc("ZroRtA5AurhsWZ2UtUubB2ojSqE3")
-      .get()
-      .then(snapshot => {
+      .onSnapshot(snapshot => {
         const dataObj = snapshot.data();
         this.setState({
           favorites: dataObj

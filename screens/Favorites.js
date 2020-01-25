@@ -16,11 +16,15 @@ class Favorites extends React.Component {
   }
 
   componentDidMount() {
+    this.getUpdate();
+    this.getFavorites();
+  }
+
+  getUpdate = () => {
     database
       .collection("favorites")
       .doc("ZroRtA5AurhsWZ2UtUubB2ojSqE3")
-      .get()
-      .then(snapshot => {
+      .onSnapshot(snapshot => {
         const dataObj = snapshot.data();
         const arr = Object.keys(dataObj);
         const filtered = arr
@@ -31,21 +35,21 @@ class Favorites extends React.Component {
         this.setState({
           favoritesList: filtered
         });
-      })
-      .then(() => {
-        database
-          .collection("artwork")
-          .doc("fromAPI")
-          .get()
-          .then(snapshot => {
-            const dataObj = snapshot.data();
-            const filtered = dataObj.data.filter(artwork =>
-              this.state.favoritesList.includes(artwork.id)
-            );
-            this.setState({ favorites: filtered });
-          });
       });
-  }
+  };
+
+  getFavorites = () => {
+    database
+      .collection("artwork")
+      .doc("fromAPI")
+      .onSnapshot(snapshot => {
+        const dataObj = snapshot.data();
+        const filtered = dataObj.data.filter(artwork =>
+          this.state.favoritesList.includes(artwork.id)
+        );
+        this.setState({ favorites: filtered });
+      });
+  };
 
   formatData = (data, numCols) => {
     const fullRows = Math.floor(this.state.favorites.length / numCols);

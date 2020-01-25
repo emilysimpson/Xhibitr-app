@@ -13,8 +13,6 @@ class SingleView extends React.Component {
     };
   }
 
-  componentDidMount() {}
-
   render() {
     const navigation = this.props.navigation;
     const artwork = navigation.getParam("artwork", "NO-ARTWORK");
