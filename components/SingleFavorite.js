@@ -14,7 +14,15 @@ const SingleFavorite = props => {
           props.navigation.navigate("SingleView", { id: props.artwork.id })
         }
       >
-        <Image source={{ uri: props.artwork.imageURL }} style={styles.image} />
+        <Image
+          source={{
+            uri:
+              "https://www.artic.edu/iiif/2/" +
+              props.artwork.image_id +
+              "/full/400,/0/default.png"
+          }}
+          style={styles.image}
+        />
       </TouchableWithoutFeedback>
     </View>
   );

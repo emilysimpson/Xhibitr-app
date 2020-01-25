@@ -10,20 +10,40 @@ class Favorites extends React.Component {
   constructor() {
     super();
     this.state = {
-      favorites: []
+      favorites: [],
+      favoritesList: []
     };
   }
 
   componentDidMount() {
     database
-      .collection("artwork")
-      .where("isFavorite", "==", true)
-      .onSnapshot(snapshot => {
-        const initFaves = [];
-        snapshot.forEach(artwork => initFaves.push(artwork.data()));
+      .collection("favorites")
+      .doc("ZroRtA5AurhsWZ2UtUubB2ojSqE3")
+      .get()
+      .then(snapshot => {
+        const dataObj = snapshot.data();
+        const arr = Object.keys(dataObj);
+        const filtered = arr
+          .filter(key => {
+            return dataObj[key];
+          })
+          .map(strNum => parseInt(strNum));
         this.setState({
-          favorites: initFaves
+          favoritesList: filtered
         });
+      })
+      .then(() => {
+        database
+          .collection("artwork")
+          .doc("fromAPI")
+          .get()
+          .then(snapshot => {
+            const dataObj = snapshot.data();
+            const filtered = dataObj.data.filter(artwork =>
+              this.state.favoritesList.includes(artwork.id)
+            );
+            this.setState({ favorites: filtered });
+          });
       });
   }
 

@@ -57,7 +57,7 @@ const SingleViewComponent = props => {
       <View style={styles.titleContainer}>
         <Text style={styles.artist}>{artwork.artist_title}</Text>
         <Text style={styles.metaData}>
-          {artwork.medium} | {artwork.date}
+          {artwork.medium_display} | {artwork.date_display}
         </Text>
 
         {artwork.latitude ? (

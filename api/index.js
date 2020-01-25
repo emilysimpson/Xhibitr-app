@@ -14,7 +14,9 @@ const query = {
     "is_on_view",
     "gallery_title",
     "latitude",
-    "longitude"
+    "longitude",
+    "dimensions",
+    "medium_display"
   ],
   limit: 45,
   query: {
